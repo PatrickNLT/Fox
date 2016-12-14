@@ -31,29 +31,29 @@ public func genPure(tree: FOXRoseTree) -> FOXGenerator {
     return FOXGenPure(tree)
 }
 
-public func genMap(generator: FOXGenerator, mapfn: (FOXRoseTree) -> FOXRoseTree) -> FOXGenerator {
+public func genMap(generator: FOXGenerator, mapfn: @escaping (FOXRoseTree) -> FOXRoseTree) -> FOXGenerator {
     return FOXGenMap(generator) { tree in
         return mapfn(tree!)
     }
 }
 
-public func map(generator: FOXGenerator, fn: (AnyObject?) -> AnyObject?) -> FOXGenerator {
+public func map(generator: FOXGenerator, fn: @escaping (Any?) -> Any?) -> FOXGenerator {
     return FOXMap(generator) { value in
         return fn(value)
     }
 }
 
-public func bind(generator: FOXGenerator, fn: (AnyObject?) -> FOXGenerator) -> FOXGenerator {
+public func bind(generator: FOXGenerator, fn: @escaping (Any?) -> FOXGenerator) -> FOXGenerator {
     return FOXBind(generator) { value in
         return fn(value!)
     }
 }
 
 public func choose(lowerBound: Int, upperBound: Int) -> FOXGenerator {
-    return FOXChoose(lowerBound, upperBound)
+    return FOXChoose(lowerBound as NSNumber, upperBound as NSNumber)
 }
 
-public func sized(factory: (UInt) -> FOXGenerator) -> FOXGenerator {
+public func sized(factory: @escaping (UInt) -> FOXGenerator) -> FOXGenerator {
     return FOXSized(factory)
 }
 
@@ -61,7 +61,7 @@ public func returns(value: AnyObject!) -> FOXGenerator {
     return FOXReturn(value)
 }
 
-public func suchThat(generator: FOXGenerator, maxTries: UInt = 3, predicate: (AnyObject!) -> Bool) -> FOXGenerator {
+public func suchThat(generator: FOXGenerator, maxTries: UInt = 3, predicate: @escaping (Any!) -> Bool) -> FOXGenerator {
     return FOXSuchThatWithMaxTries(generator, predicate, maxTries)
 }
 
@@ -69,12 +69,12 @@ public func oneOf(generators: [FOXGenerator]) -> FOXGenerator {
     return FOXOneOf(generators)
 }
 
-public func elements(elements: [AnyObject!]) -> FOXGenerator {
+public func elements(elements: [AnyObject?]) -> FOXGenerator {
     return FOXElements(elements)
 }
 
 public func frequency(pairs: (UInt, FOXGenerator)...) -> FOXGenerator {
-    var objcPairs: [AnyObject] = []
+    var objcPairs: [Any] = []
     for (freq, gen) in pairs {
         objcPairs.append([freq, gen])
     }
@@ -135,11 +135,11 @@ public func decimalNumber() -> FOXGenerator {
 
 // MARK: Property Generators
 
-public func forAll(dataType: FOXGenerator, then: (AnyObject!) -> Bool) -> FOXGenerator {
+public func forAll(dataType: FOXGenerator, then: @escaping (Any!) -> Bool) -> FOXGenerator {
     return FOXForAll(dataType, then)
 }
 
-public func forSome(dataType: FOXGenerator, then: (AnyObject!) -> FOXPropertyStatus) -> FOXGenerator {
+public func forSome(dataType: FOXGenerator, then: @escaping (Any!) -> FOXPropertyStatus) -> FOXGenerator {
     return FOXForSome(dataType, then)
 }
 
@@ -155,7 +155,7 @@ public func commands(stateMachine: FOXStateMachine) -> FOXGenerator {
     return FOXCommands(stateMachine)
 }
 
-public func executeCommands(stateMachine: FOXStateMachine, subjectFactory: () -> AnyObject!) -> FOXGenerator {
+public func executeCommands(stateMachine: FOXStateMachine, subjectFactory: @escaping () -> AnyObject!) -> FOXGenerator {
     return FOXExecuteCommands(stateMachine, subjectFactory)
 }
 

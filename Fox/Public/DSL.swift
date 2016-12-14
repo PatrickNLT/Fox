@@ -14,13 +14,13 @@ public func Assert(
         let maxSize = (maximumSize != nil) ? maximumSize! : FOXGetMaximumSize()
 
         let runner = FOXRunner.assertInstance()
-        let result = runner.resultForNumberOfTests(numTests,
+        let result = runner!.resultForNumber(ofTests: numTests,
             property: property,
             seed: theSeed,
             maxSize: maxSize)
 
-        if !result.succeeded {
-            XCTFail("Property failed with: \(result.singleLineDescriptionOfSmallestValue())",
+        if !result!.succeeded {
+            XCTFail("Property failed with: \(result!.singleLineDescriptionOfSmallestValue())",
                 file: file, line: line)
         }
 }
